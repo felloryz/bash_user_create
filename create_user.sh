@@ -80,6 +80,7 @@ echo "$shadow_string" >> /etc/shadow
 # User home directory create 
 mkdir "/home/$username"
 chmod 755 "/home/$username"
+chown "$username" "/home/$username"
 
 group_string="$username:x:$current_gid:"
 echo "$group_string" >> /etc/group

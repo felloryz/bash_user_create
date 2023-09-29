@@ -53,9 +53,11 @@ if $root_flag; then
     current_uid=0
     current_gid=0
 else
-    last_uid=$(tail -1 /etc/passwd | cut -d: -f3) # Get UID from /etc/passwd
+    # last_uid=$(tail -1 /etc/passwd | cut -d: -f3) 
+    last_uid=$(awk -F ":" '$3 > 1000 { uid = $3 } END { print uid }' /etc/passwd) # Get UID from /etc/passwd
     current_uid=$((last_uid+1))
-    last_gid=$(tail -1 /etc/passwd | cut -d: -f4) # Get GID from /etc/passwd
+    # last_gid=$(tail -1 /etc/passwd | cut -d: -f4)
+    last_gid=$(awk -F ":" '$4 > 1000 { gid = $4 } END { print gid }' /etc/passwd)  # Get GID from /etc/passwd
     current_gid=$((last_gid+1))
 fi
 
@@ -75,7 +77,7 @@ last_password_changed=$((`date +%s` / (3600 * 24)))
 shadow_string="$username:$password_hash:$last_password_changed:0:99999:7:::"
 echo "$shadow_string" >> /etc/shadow
 
-# не забыть про создание директории пользователя + права на директорию
+# User home directory create 
 mkdir "/home/$username"
 chmod 755 "/home/$username"
 

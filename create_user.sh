@@ -66,7 +66,7 @@ passwd_string="$username:x:$current_uid:$current_gid::/home/$username:/bin/bash"
 echo "$passwd_string" >> /etc/passwd
 
 if [ -z $password ]; then
-    password_hash="*"
+    password_hash=""
 else
     hash_salt=$(openssl rand -base64 10)
     password_hash=$(openssl passwd -6 -salt $hash_salt $password)
